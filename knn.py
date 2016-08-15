@@ -1,7 +1,7 @@
 from sklearn import datasets
 import numpy as np
-import random
 from scipy.spatial import distance
+import sys
 
 def euc(a, b):
 
@@ -63,14 +63,22 @@ class ScrapyKNN():
 		return most_Common(close_matches)
 
 	def predict(self, X_test, k):
-		predictions = []
 
-		for row in X_test:
+		try:
 
-			label = self.closest(row, k)
-			predictions.append(label)
+			predictions = []
 
-		return predictions
+			for row in X_test:
+
+				label = self.closest(row, k)
+				predictions.append(label)
+
+			return predictions
+
+		except IndexError:
+			print "You have entered a negative Value of k. Please enter a whole number value for k"
+			sys.exit()
+
 
 iris = datasets.load_iris()
 X = iris.data
@@ -83,7 +91,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = .5)
 clf = ScrapyKNN()
 
 clf.fit(X_train, y_train)
-predictions = clf.predict(X_test, k = 1)
+predictions = clf.predict(X_test, k = 1)		#### Enter a whole number value for k. If you enter float it will take int part only.
 # print predictions
 
 from sklearn.metrics import accuracy_score
